@@ -3,6 +3,8 @@ $colorHeading: #be4a14;
 #content  // div with id: content
 {
     color: $fontColor;
+    display: flex;
+    flex-direction: column;
 }
 
 h2
@@ -17,4 +19,17 @@ h1{
 #carDataError {
     background: #e72525;
     color: #d3d3d3;
+}
+
+input {
+    width: 200px;
+    padding: 5px;
+    margin: 2px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+input[type="number"], input[type="text"] {
+    padding: 5px 2px;
+    width: 195px;
 }
