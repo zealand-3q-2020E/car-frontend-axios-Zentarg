@@ -4,7 +4,7 @@ import axios, {
 } from "../../node_modules/axios/index";
 import { ICar } from "ICar";
 
-let carAPI = "https://webapicar20190326034339.azurewebsites.net/api/cars";
+let carAPI = "http://localhost:54180/api/Cars";
 
 let carDataContainer = document.getElementById("carData");
 let carDataError = document.getElementById("carDataError");
@@ -16,6 +16,10 @@ document.getElementById("getCarIDDataButton").addEventListener("click", GetCarBy
 document.getElementById("postCarButton").addEventListener("click", PostCar);
 
 document.getElementById("deleteCarButton").addEventListener("click", DeleteCar);
+
+document.getElementById("getCarByVendorButton").addEventListener("click", GetCarsByVendor);
+
+document.getElementById("getCarByVendorAndPriceButton").addEventListener("click", GetCarsByVendorAndPrice);
 
 function CreateCarListElement(car : ICar) {
     let li : HTMLLIElement = document.createElement("li");
@@ -88,4 +92,30 @@ function DeleteOneCar(id : number) {
         console.log(error);
         carDataError.innerText = error.toJSON.toString();
     });
+}
+
+function GetCarsByVendor() {
+    let vendor : string = "";
+    let vendorStringElement : HTMLInputElement = <HTMLInputElement> document.getElementById("getCarByVendor");
+    vendor = vendorStringElement.value;
+    axios.get<ICar[]>(carAPI + `/ByVendor/${vendor}`).then((response : AxiosResponse<ICar[]>) => {
+        response.data.forEach(element => {
+            carDataContainer.appendChild(CreateCarListElement(element));
+        });
+    })
+}
+
+function GetCarsByVendorAndPrice() {
+    let vendor : string = "";
+    let price : number = 0;
+    let vendorElement : HTMLInputElement = <HTMLInputElement> document.getElementById("getCarByVendorAndPriceVendor")
+    let priceElement : HTMLInputElement = <HTMLInputElement> document.getElementById("getCarByVendorAndPricePrice")
+    vendor = vendorElement.value;
+    price = +priceElement.value;
+    console.log(carAPI + `/ByVendor/${vendor}/${price}`)
+    axios.get<ICar[]>(carAPI + `/ByVendor/${vendor}/${price}`).then((response : AxiosResponse<ICar[]>) => {
+        response.data.forEach(element => {
+            carDataContainer.appendChild(CreateCarListElement(element));
+        })
+    })
 }
