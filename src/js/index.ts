@@ -21,6 +21,8 @@ document.getElementById("getCarByVendorButton").addEventListener("click", GetCar
 
 document.getElementById("getCarByVendorAndPriceButton").addEventListener("click", GetCarsByVendorAndPrice);
 
+document.getElementById("updateCarButton").addEventListener("click", UpdateOneCar);
+
 function CreateCarListElement(car : ICar) {
     let li : HTMLLIElement = document.createElement("li");
     let liText : Text = document.createTextNode(`${car.id} | Vendor: ${car.vendor} | Model: ${car.model} | Price: ${car.price}`);
@@ -118,4 +120,26 @@ function GetCarsByVendorAndPrice() {
             carDataContainer.appendChild(CreateCarListElement(element));
         })
     })
+}
+
+function UpdateOneCar() {
+    let id : number = 0;
+    let vendor : string = "";
+    let model : string = "";
+    let price : number = 0;
+    let idElement : HTMLInputElement = <HTMLInputElement> document.getElementById("updateCarID")
+    let vendorElement : HTMLInputElement = <HTMLInputElement> document.getElementById("updateCarVendor")
+    let modelElement : HTMLInputElement = <HTMLInputElement> document.getElementById("updateCarModel")
+    let priceElement : HTMLInputElement = <HTMLInputElement> document.getElementById("updateCarPrice")
+    id = +idElement.value;
+    vendor = vendorElement.value;
+    model = modelElement.value;
+    price = +priceElement.value;
+    axios.put<ICar>(carAPI + `/${id}`, <ICar>{id, vendor, model, price}).then((response : AxiosResponse) => {
+        GetAllCars();
+    }).catch((error : AxiosError) => {
+        console.log(error);
+        carDataError.innerText = error.toJSON.toString();
+    });
+
 }
